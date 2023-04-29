@@ -16,9 +16,9 @@ sudo -u peterm mkdir -p --mode=700 /home/peterm/.ssh
 mv /root/.ssh/authorized_keys /home/peterm/.ssh/.
 chown peterm:peterm /home/peterm/.ssh/authorized_keys
 
-# disable root login
+# disable root login and password login
 sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 
 cd /home/peterm/ || exit
 sudo -u peterm mkdir gitrepos
