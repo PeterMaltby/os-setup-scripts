@@ -55,17 +55,18 @@ mkdir -p "${desktopDir}"
 pCheckError $? "mkdir for $desktopDir"
 
 # update all packages
-pLog "system update"
+pLog "system update using pacman"
 sudo pacman -Syyu
 pCheckError $? "pacman system update"
 
 # install locales
 pLog "Generating correct locales"
-sudo -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
-sudo -i 's/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
+sudo sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+sudo sed -i 's/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
 sudo locale-gen
 pCheckError $? "locale-gen"
 
+# install packages
 pLog "installing pacman packages"
 sudo pacman -S  neofetch \
                 neovim \
@@ -84,28 +85,46 @@ sudo pacman -S  neofetch \
                 openttd openttd-opengfx openttd-opensfx \
                 npm \
                 shellcheck
-pCheckError $? "pacman packages installed"
-
-# ZSH
-chsh -s /bin/zsh
-pCheckError $? "change shell"
+pCheckError $? "pacman packages install"
 
 # yay install
-cd /home/peterm/Downloads/ || exit
+pLog "installing yay package manager"
+if ! cd "$downloadDir"; then
+    echo "failed to cd to $downloadDir"
+    exit 1
+fi
+
 git clone https://aur.archlinux.org/yay.git
+pCheckError $? "git clone yay"
 cd yay || exit
 makepkg -si
+pCheckError $? "makepkg"
 yay -Y --gendb
+pCheckError $? "yay gen db"
 yay -Syu --devel
+pCheckError $? "yay update"
 
+pLog "installing AUR pakcages using yay"
 yay -S  flavours \
         librewolf \
         aur/rslsync \
+pCheckError $? "yay package install"
+
+# ZSH
+pLog "changing default shell to zsh"
+chsh -s /bin/zsh
+pCheckError $? "chsh"
 
 # dwm install
-cd /home/peterm/gitrepos/ || exit
+pLog "installing petes dwm"
+cd "$gitDir" || exit
 git https://github.com/PeterMaltby/petes-dwm.git
-cd petes-dwm/ || exit
+pCheckError $? "git clone dwm"
+cd petes-dwm || exit
 sudo make clean install
+pCheckError $? "make"
+
 
 # TODO resilio
+
+pEnd
