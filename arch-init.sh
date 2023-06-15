@@ -46,6 +46,10 @@ source "$HOME/scripts/PABLO.sh"
 downloadDir="$HOME/Downloads/"
 desktopDir="$HOME/Desktop/"
 
+
+syncStorage="${HOME}/.config/rslsync"
+syncConfig="syncStorage/sync.conf"
+
 #############################################################
 pStart
 
@@ -125,8 +129,21 @@ cd petes-dwm || exit
 sudo make clean install
 pCheckError $? "make"
 
-# TODO resilio
+# resilio sync
+pLog "creating resilio sync config"
+mkdir "$syncStorage"
+pCheckError $? "mkdir"
 
+cat > "$syncConfig" << EOF
 
+EOF
+pCheckError $? "cat config file"
+
+sed -i "s/DEVICE_NAME/$USER@$HOSTNAME/g" "$syncConfig"
+pCheckError $? "sed device name"
+sed -i "s|STORAGE_PATH|${syncStorage}|g" "$syncConfig"
+pCheckError $? "sed storage path"
+
+pLog "sync template created at $syncConfig, please complete then enable the resilio user service"
 
 pEnd
