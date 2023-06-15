@@ -64,8 +64,7 @@ sudo -i 's/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
 sudo locale-gen
 pCheckError $? "locale-gen"
 
-exit
-
+pLog "installing pacman packages"
 sudo pacman -S  neofetch \
                 neovim \
                 qbittorrent \
@@ -80,16 +79,14 @@ sudo pacman -S  neofetch \
                 alacritty \
                 thunderbird \
                 vlc \
-                openttd openttd-opengfx openttd-opensfx openttd-openmsx \
-#                npm shellcheck
-
-cd /home/peterm/gitrepos/ || exit
-git clone https://github.com/PeterMaltby/.dotfiles.git
-cd .dotfiles || exit
-.bootstrap.sh
+                openttd openttd-opengfx openttd-opensfx \
+                npm \
+                shellcheck
+pCheckError $? "pacman packages installed"
 
 # ZSH
 chsh -s /bin/zsh
+pCheckError $? "change shell"
 
 # yay install
 cd /home/peterm/Downloads/ || exit
