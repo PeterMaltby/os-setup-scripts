@@ -135,7 +135,27 @@ mkdir "$syncStorage"
 pCheckError $? "mkdir"
 
 cat > "$syncConfig" << EOF
+{
+	"device_name": "DEVICE_NAME",
+	"listening_port": 8888,
+	"storage_path": "STORAGE_PATH",
+	"pid_file": "STORAGE_PATH/rslsync.pid",
+	"use_upnp": false,
 
+	"shared_folders" :
+	[
+	{
+		"secret": "mysecret code",
+		"dir": "/home/user/myfiles",
+		"use_relay_server" : true,
+		"use_tracker": false,
+		"search_lan": false,
+		"use_sync_trash" : false,
+		"overwrite_changes": false,
+		"selective_sync": false
+	}
+	]
+}
 EOF
 pCheckError $? "cat config file"
 
