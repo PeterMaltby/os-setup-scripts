@@ -5,8 +5,8 @@
 #############################################################
 dotfilesRepo="https://github.com/PeterMaltby/.dotfiles.git"
 
-gitDir="${HOME}gitrepos/"
-dotfilesDir="${gitDir}.dotfiles"
+gitDir="${HOME}/gitrepos"
+dotfilesDir="${gitDir}/.dotfiles"
 
 #############################################################
 # bootstrap
@@ -50,7 +50,9 @@ desktopDir="$HOME/Desktop/"
 pStart
 
 mkdir -p "${downloadDir}"
+pCheckError $? "mkdir for $downloadDir"
 mkdir -p "${desktopDir}"
+pCheckError $? "mkdir for $desktopDir"
 
 # update all packages
 pLog "system update"
