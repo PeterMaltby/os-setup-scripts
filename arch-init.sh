@@ -48,7 +48,7 @@ desktopDir="$HOME/Desktop/"
 
 
 syncStorage="${HOME}/.config/rslsync"
-syncConfig="syncStorage/sync.conf"
+syncConfig="$syncStorage/sync.conf"
 
 #############################################################
 pStart
