@@ -119,7 +119,7 @@ pCheckError $? "chsh"
 # dwm install
 pLog "installing petes dwm"
 cd "$gitDir" || exit
-git https://github.com/PeterMaltby/petes-dwm.git
+git clone https://github.com/PeterMaltby/petes-dwm.git
 pCheckError $? "git clone dwm"
 cd petes-dwm || exit
 sudo make clean install
