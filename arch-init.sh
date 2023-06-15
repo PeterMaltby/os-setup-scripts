@@ -106,8 +106,9 @@ pCheckError $? "yay update"
 
 pLog "installing AUR pakcages using yay"
 yay -S  flavours \
-        librewolf \
+        librewolf-bin \
         aur/rslsync \
+        openttd-openmsx
 pCheckError $? "yay package install"
 
 # ZSH
@@ -124,7 +125,8 @@ cd petes-dwm || exit
 sudo make clean install
 pCheckError $? "make"
 
-
 # TODO resilio
+
+
 
 pEnd
