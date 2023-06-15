@@ -27,13 +27,13 @@ if ! git clone $dotfilesRepo "$dotfilesDir"; then
     exit 1
 fi
 
-if ! cd $dotfilesRepo; then
-    echo "cannot move to $dotfilesRepo"
+if ! cd "$dotfilesDir"; then
+    echo "cannot move to $dotfilesDir"
     exit 1
 fi
 
 # run bootstrap script for configs
-if ! $dotfilesRepo/bootstrap.sh; then
+if ! "${dotfilesDir}/bootstrap.sh"; then
     echo "bootstrap failed!"
     exit 1
 fi
