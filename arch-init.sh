@@ -88,7 +88,9 @@ sudo pacman -S  neofetch \
                 vlc \
                 openttd openttd-opengfx openttd-opensfx \
                 npm \
-                shellcheck
+                shellcheck \
+                ttf-hack-nerd
+
 pCheckError $? "pacman packages install"
 
 # yay install
