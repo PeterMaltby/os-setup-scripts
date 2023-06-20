@@ -57,7 +57,8 @@ brew install    firefox \
                 microsoft-outlook \
                 thunderbird \
                 resilio-sync \
-                spotify
+                spotify \
+				alacritty
 
 osascript -e 'tell application "System Preferences" to quit'
 
