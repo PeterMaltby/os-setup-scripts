@@ -89,7 +89,8 @@ sudo pacman -S  neofetch \
                 openttd openttd-opengfx openttd-opensfx \
                 npm \
                 shellcheck \
-                ttf-hack-nerd
+                ttf-hack-nerd \
+                pavucontrol 
 
 pCheckError $? "pacman packages install"
 
