@@ -76,6 +76,8 @@ sudo sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 64/g' /etc/pacman.conf
 # install packages
 pLog "installing pacman packages"
 sudo pacman -S  neofetch \
+                less \
+                man-db \
                 neovim \
                 qbittorrent \
                 ttf-liberation \
