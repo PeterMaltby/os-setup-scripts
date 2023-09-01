@@ -70,6 +70,9 @@ sudo sed -i 's/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
 sudo locale-gen
 pCheckError $? "locale-gen"
 
+# pacman configuration
+sudo sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 64/g' /etc/pacman.conf
+
 # install packages
 pLog "installing pacman packages"
 sudo pacman -S  neofetch \
@@ -90,7 +93,8 @@ sudo pacman -S  neofetch \
                 npm \
                 shellcheck \
                 ttf-hack-nerd \
-                pavucontrol 
+                pavucontrol \
+                xfce4
 
 pCheckError $? "pacman packages install"
 
