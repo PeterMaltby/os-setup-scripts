@@ -48,7 +48,7 @@ desktopDir="$HOME/Desktop/"
 
 
 syncStorage="${HOME}/.config/rslsync"
-syncConfig="$syncStorage/sync.conf"
+syncConfig="$syncStorage/rslsync.conf"
 
 #############################################################
 pStart
@@ -85,6 +85,7 @@ sudo pacman -S  neofetch \
                 git \
                 zsh \
                 figlet \
+                openssh \
                 firefox \
                 steam \
                 dmenu \
