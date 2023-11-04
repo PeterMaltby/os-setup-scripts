@@ -161,11 +161,10 @@ cat > "$syncConfig" << EOF
 		"secret": "mysecret code",
 		"dir": "/home/user/myfiles",
 		"use_relay_server" : true,
-		"use_tracker": false,
-		"search_lan": false,
-		"use_sync_trash" : false,
-		"overwrite_changes": false,
-		"selective_sync": false
+		"use_tracker": true,
+		"search_lan": true,
+		"use_sync_trash" : true,
+		"overwrite_changes": false
 	}
 	]
 }
