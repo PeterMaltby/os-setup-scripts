@@ -76,12 +76,15 @@ sudo sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 64/g' /etc/pacman.conf
 # install packages
 pLog "installing pacman packages"
 sudo pacman -S  neofetch \
+                picom \
                 less \
                 man-db \
                 neovim \
+                xorg-xsetroot \
                 qbittorrent \
                 ttf-liberation \
                 htop \
+                cronie \
                 git \
                 zsh \
                 figlet \
