@@ -47,8 +47,13 @@ downloadDir="$HOME/Downloads/"
 desktopDir="$HOME/Desktop/"
 
 
-syncStorage="${HOME}/.config/rslsync"
+syncStorage="$HOME/.config/rslsync"
+syncConfigTmp="${tmpDir}/sync.json"
+syncConfigTmpWrite="${tmpDir}/syncw.json"
+rawKeys="${tmpDir}/rawKeys.txt"
 syncConfig="$syncStorage/rslsync.conf"
+# secret name for bitwarden resilio keys
+BWRSLNAME="resilio-keys"
 
 #############################################################
 pStart
@@ -100,7 +105,8 @@ sudo pacman -S  neofetch \
                 shellcheck \
                 ttf-hack-nerd \
                 pavucontrol \
-                xfce4
+                xfce4 \
+                jq
 
 pCheckError $? "pacman packages install"
 
@@ -125,7 +131,8 @@ pLog "installing AUR pakcages using yay"
 yay -S  flavours \
         librewolf-bin \
         aur/rslsync \
-        openttd-openmsx
+        openttd-openmsx \
+        bitwarden-cli
 pCheckError $? "yay package install"
 
 # ZSH
@@ -143,39 +150,67 @@ sudo make clean install
 pCheckError $? "make"
 
 # resilio sync
-pLog "creating resilio sync config"
-mkdir "$syncStorage"
-pCheckError $? "mkdir"
+# add bitwarden-cli to yay installs
+# add jq to installs pacman
 
-cat > "$syncConfig" << EOF
+pLog "logging into bitwarden"
+while ! bw login --check; do
+    bw login
+done
+
+pLog "collecting rslsync keys"
+bw list items --search "$BWRSLNAME" | jq -r '.[] | .notes' > "$rawKeys"
+
+pLog "got raw keys"
+pLog "$(cat "$rawKeys")"
+
+pLog "creating sync config using keys"
+cat > "$syncConfigTmp" << EOF
 {
 	"device_name": "DEVICE_NAME",
 	"listening_port": 8888,
 	"storage_path": "STORAGE_PATH",
 	"pid_file": "STORAGE_PATH/rslsync.pid",
 	"use_upnp": false,
-
 	"shared_folders" :
 	[
-	{
-		"secret": "mysecret code",
-		"dir": "/home/user/myfiles",
-		"use_relay_server" : true,
-		"use_tracker": true,
-		"search_lan": true,
-		"use_sync_trash" : true,
-		"overwrite_changes": false
-	}
 	]
 }
 EOF
-pCheckError $? "cat config file"
 
-sed -i "s/DEVICE_NAME/$USER@$HOSTNAME/g" "$syncConfig"
+sed -i "s/DEVICE_NAME/$USER@$HOSTNAME/g" "$syncConfigTmp"
 pCheckError $? "sed device name"
-sed -i "s|STORAGE_PATH|${syncStorage}|g" "$syncConfig"
+sed -i "s|STORAGE_PATH|${syncStorage}|g" "$syncConfigTmp"
 pCheckError $? "sed storage path"
 
-pLog "sync template created at $syncConfig, please complete then enable the resilio user service"
+while read -r key; do
+    dir=$(cut -d":" -f1 <<< "$key")
+    key=$(cut -d":" -f2 <<< "$key")
+    pLog "dir: $dir, key: $key"
 
+    jq ".shared_folders += [{
+	    \"secret\": \"$key\",
+	    \"dir\": \"$HOME/$dir\",
+	    \"use_relay_server\" : true,
+	    \"use_tracker\": true,
+	    \"search_lan\": true,
+	    \"use_sync_trash\" : true,
+	    \"overwrite_changes\": false
+    }]" "$syncConfigTmp" >> "$syncConfigTmpWrite"
+
+    mv "$syncConfigTmpWrite" "$syncConfigTmp"
+
+done < "$rawKeys"
+
+pLog "sync config generated"
+pLog "$(cat "$syncConfigTmp")"
+
+pLog "making dir $syncStorage"
+mkdir -p "$syncStorage"
+pCheckError $? "mkdir"
+
+pLog "moving sync $syncConfigTmp file to $syncConfig"
+mv "$syncConfigTmp" "$syncConfig"
+
+pLog "sync config setup enable user service"
 pEnd
