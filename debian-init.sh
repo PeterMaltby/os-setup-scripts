@@ -4,6 +4,8 @@
 # created: 2023-04-28
 #############################################################
 
+set -eux
+
 # update and install git and vim
 curl -sSL https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info | tic -x -
 
@@ -20,8 +22,8 @@ cp /root/.ssh/authorized_keys /home/peterm/.ssh/.
 chown peterm:peterm /home/peterm/.ssh/authorized_keys
 
 # disable root login and password login
-# sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-# sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 
 cd /home/peterm/ || exit
 sudo -u peterm mkdir gitrepos

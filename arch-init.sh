@@ -15,7 +15,7 @@ if ! cd "$HOME"; then
     exit 1
 fi
 
-mkdir "$gitDir"
+mkdir -p "$gitDir"
 
 if ! cd "$gitDir"; then
     echo "cannot move to ${gitDir}"
